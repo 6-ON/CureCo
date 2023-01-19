@@ -1,1 +1,4 @@
 node_modules
+css/output.css
+img/products/*
+!img/products/prod-test.png
