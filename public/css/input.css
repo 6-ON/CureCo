@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-container {
+    @apply h-screen min-h-screen w-screen flex justify-center items-center bg-cover;
+}
+.auth-form {
+    @apply flex flex-col gap-3 font-semibold;
+}
+.auth-container {
+    @apply bg-blue-400 bg-opacity-20 backdrop-blur h-fit px-6 py-4 rounded-2xl;
+}
+.login-field {
+    @apply rounded-3xl p-2  bg-sky-500 placeholder-sky-200 text-center text-sky-50 focus:outline-none;
+}
+
+.field-error {
+    @apply bg-red-400 outline-red-300 text-red-200 animate-shake;
+}
+.auth-submit {
+
+    @apply mt-12 bg-blue-600 text-blue-100 hover:bg-blue-100 hover:text-blue-600 p-2 rounded-3xl hover:translate-y-0.5 shadow-lg transition ease-in duration-75 ;
+}
+
+/* dashboard */
+
+.btn-primary {
+    @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+}
