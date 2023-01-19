@@ -1,0 +1,19 @@
+{
+    "name": "6-on/cure-co",
+    "autoload": {
+        "psr-4": {
+            "CureCo\\": "."
+        }
+    },
+    "authors": [
+        {
+            "name": "6-ON",
+            "email": "aminhatim6@gmail.com"
+        }
+    ],
+    "require": {
+        "6-on/hw-framework": "^1.0",
+        "vlucas/phpdotenv": "^5.5",
+      "ext-pdo": "*"
+    }
+}
