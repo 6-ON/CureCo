@@ -1,3 +1,6 @@
+const errorStyle = 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+
+
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -11,14 +14,12 @@ const Toast = Swal.mixin({
 })
 
 
-
-
-function loadProducts(term = '') {
+function loadProducts(options = {}) {
     $('table tbody').empty()
     $('#loading-spinner').show()
     $.ajax({
         url: "/api/products/get",
-        data : {term :term},
+        data: options,
         type: 'GET',
         dataType: 'json',
         success: function (res) {
@@ -49,8 +50,8 @@ $(function () {
 
 
     //searching and updating datatable
-    $('#topbar-search').on('keyup', function () {
-        loadProducts($(this).val())
+    $('#topbar-search').bind('keyup',  async function () {
+           await loadProducts({term: $(this).val()})
     })
 
     // edit button click
@@ -86,7 +87,7 @@ $(function () {
                 modalProduct.quantity.val(product.quantity)
             },
             error: function (e) {
-                console.log(e)
+                console.error(e)
             }
         })
 
@@ -130,7 +131,45 @@ $(function () {
 
             },
             error: function (e) {
-                console.log(e)
+                console.error(e)
+            }
+        })
+    })
+    $('#create-form').on('submit', function (event) {
+        event.preventDefault();
+        const fields = $('#create-form input,#create-form button')
+        const formData = new FormData(this)
+        //validate image
+        if (formData.get('image').size === 0) {
+            return
+        }
+        $.ajax({
+            url: '/api/products/create',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                fields
+                    .prop('disabled', true)
+                    .addClass('cursor-not-allowed')
+            },
+            success: function (res) {
+                console.info(res)
+                fields
+                    .prop('disabled', false)
+                    .removeClass('cursor-not-allowed')
+                $('#createProductModal').click()
+                Toast.fire({
+                    icon: res.type,
+                    title: res.content
+                })
+                loadProducts()
+            },
+            error: function (error) {
+                console.error(error)
             }
         })
     })
