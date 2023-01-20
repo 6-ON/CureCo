@@ -43,10 +43,42 @@ class AuthController extends Controller
             return json_encode(Product::findOne(['id' => $id]));
         } else {
             $term = $request->getBody()['term'] ?? false;
-            if($term){
-                return  json_encode(Product::search($term));
+            if ($term) {
+                return json_encode(Product::search($term));
             }
             return json_encode(Product::getAll());
+        }
+
+    }
+
+    public function productCreate(Request $request, Response $response): false|string
+    {
+        $response->setContentType(Response::TYPE_JSON);
+        try {
+            Application::$app->db->pdo->beginTransaction();
+            $data = $request->getBody();
+            $product = new Product();
+            $product->loadData($data);
+
+
+            if ($product->validate() && $product->save()) {
+                $image = $request->getFiles()['image'] ?? throw new \Exception();
+                $productId = Application::$app->db->pdo->lastInsertId();
+                $type = explode("/", $image['type']);
+                $uploadName = sprintf('prod-%s.%s',$productId , end($type));
+                $this->uploadFile($image, $uploadName);
+                Product::update(['image'=>$uploadName],['id'=>$productId]);
+            }else{
+                throw new \Exception();
+            }
+
+            Application::$app->db->pdo->commit();
+
+            return json_encode($this->makeMessage('success', 'the Product was created successfully !'));
+        } catch (\Exception) {
+            Application::$app->db->pdo->rollBack();
+            $response->setStatusCode(500);
+            return json_encode($this->makeMessage('error', 'there was an error while creating Product'));
         }
 
     }
@@ -74,9 +106,8 @@ class AuthController extends Controller
 
     public function makeMessage($type, $content): array
     {
-        return ['type' => $type ,'content' => $content];
+        return ['type' => $type, 'content' => $content];
     }
-
 
 
 }
