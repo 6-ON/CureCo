@@ -19,7 +19,7 @@ class Product extends DbModel
 
     public function attributes(): array
     {
-        return ['name', 'price', 'quantity', 'image'];
+        return ['name', 'price', 'quantity'];
     }
 
     public static function primaryKey(): string
@@ -33,7 +33,6 @@ class Product extends DbModel
             'name' => [self::RULE_REQUIRED],
             'price' => [self::RULE_REQUIRED],
             'quantity' => [self::RULE_REQUIRED],
-            'image' => [self::RULE_REQUIRED]
         ];
 
     }
