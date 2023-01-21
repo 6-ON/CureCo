@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "tailwindcss": "^3.2.4"
+  },
+  "scripts": {
+    "tw" : "npx tailwindcss -i css/input.css  -o css/output.css --watch"
   }
 }
