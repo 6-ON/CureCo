@@ -11,7 +11,7 @@ function productRow({id, name, price, quantity, image}) {
                 </div>
             </td>
             <td class="p-4">
-                <img class="h-24" src="img/products/${image}?generated_at=${new Date().getTime()}" alt="${name}">
+                <img class="h-20" src="img/products/${image}?generated_at=${new Date().getTime()}" alt="${name}">
             </td>
             <th scope="row" class="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap dark:text-white">
                 ${name}
