@@ -151,6 +151,7 @@ $(function () {
     })
     $('#create-form').on('submit', function (event) {
         event.preventDefault();
+        const thisForm = $(this)[0]
         const fields = $('#create-form input,#create-form button')
         const formData = new FormData(this)
         //validate image
@@ -181,6 +182,7 @@ $(function () {
                     title: res.content
                 })
                 loadProducts()
+                thisForm.reset()
             },
             error: function (error) {
                 console.error(error)
