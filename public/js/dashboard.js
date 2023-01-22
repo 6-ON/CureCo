@@ -21,12 +21,13 @@ function loadProducts(options = {}) {
         data: options,
         type: 'GET',
         dataType: 'json',
-        beforeSend : function () {
+        beforeSend: function () {
             rows.empty()
             $('#loading-spinner').show()
         },
         success: function (res) {
             rows.empty()
+            $('#btn-delete').prop('disabled',true)
             $('#loading-spinner').hide()
             if (!res.length) {
                 rows.append(noResults())
@@ -45,6 +46,7 @@ function loadProducts(options = {}) {
 
 
 $(function () {
+    const tableBody = $('table tbody')
     //loading products
     loadProducts()
     // toggle all table rows
@@ -58,8 +60,16 @@ $(function () {
         loadProducts({term: $(this).val()})
     })
 
+    tableBody.on('change', 'input[type="checkbox"]', function () {
+        const btnDelete = $('#btn-delete')
+        if ($('table tbody input[type="checkbox"]:checked').length === 0) {
+            btnDelete.prop('disabled',true)
+        }else{
+            btnDelete.prop('disabled',false)
+        }
+    })
     // edit button click
-    $('table tbody').on('click', 'button[data-action="edit"]', function () {
+    tableBody.on('click', 'button[data-action="edit"]', function () {
         const modalProduct = {
             name: $('#name-edit'),
             price: $('#price-edit'),
@@ -177,13 +187,22 @@ $(function () {
             }
         })
     })
-    $('#btn-delete').on('click', function () {
-        const dataToSend = new FormData()
-        $('table tbody input[type="checkbox"]').map(function () {
-            if ($(this).is(':checked') && !isNaN($(this).val()))
-                dataToSend.append('products[]',$(this).val())
-        })
 
+    $('#delete-confirm-btn').on('click', function () {
+        const dataToSend = new FormData()
+        $('table tbody input[type="checkbox"]:checked').map(function () {
+            if (!isNaN($(this).val()))
+                dataToSend.append('products[]', $(this).val())
+        })
+        console.log(dataToSend)
+        if (!dataToSend.has('products[]')) {
+            Toast.fire({
+                icon: 'error',
+                title: 'No product selected'
+            })
+            $('#deleteModal').click()
+            return
+        }
         $.ajax({
             url: '/api/products/delete',
             type: 'POST',
@@ -192,16 +211,17 @@ $(function () {
             contentType: false,
             cache: false,
             processData: false,
-            success : function (res) {
+            success: function (res) {
                 console.log(res)
                 Toast.fire({
                     icon: res.type,
                     title: res.content
                 })
+                $('#deleteModal').click()
                 loadProducts()
             },
-            error : function (error) {
-
+            error: function (error) {
+                console.error(error)
             }
         })
     })
