@@ -106,7 +106,7 @@ $this->title = 'Dashboard';
                         Image</label>
                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                            id="image-edit"
-                           type="file" name="image">
+                           type="file" name="image" accept="image/*">
 
                 </div>
                 <input type="hidden" name="id" id="id-edit" required>
@@ -175,7 +175,7 @@ $this->title = 'Dashboard';
                         Image</label>
                     <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                            id="image-create"
-                           type="file" name="image" required>
+                           type="file" name="image" accept="image/*" required>
 
                 </div>
                 <div class="flex mt-3">
