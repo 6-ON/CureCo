@@ -65,10 +65,10 @@ class AuthController extends Controller
                 $image = $request->getFiles()['image'] ?? throw new \Exception();
                 $productId = Application::$app->db->pdo->lastInsertId();
                 $type = explode("/", $image['type']);
-                $uploadName = sprintf('prod-%s.%s',$productId , end($type));
+                $uploadName = sprintf('prod-%s.%s', $productId, end($type));
                 $this->uploadFile($image, $uploadName);
-                Product::update(['image'=>$uploadName],['id'=>$productId]);
-            }else{
+                Product::update(['image' => $uploadName], ['id' => $productId]);
+            } else {
                 throw new \Exception();
             }
 
@@ -102,6 +102,25 @@ class AuthController extends Controller
             return json_encode($this->makeMessage('error', 'there was an error while updating !'));
         }
 
+    }
+
+    public function productDelete(Request $request, Response $response)
+    {
+        $response->setContentType(Response::TYPE_JSON);
+        try {
+
+            $products = $request->getBody()['products'] ?? throw new \Exception();
+            if (is_array($products)) {
+                foreach ($products as $id) {
+                    Product::delete(['id' => $id]);
+                }
+                return json_encode($this->makeMessage('info', 'Product(s) has been deleted'));
+            } else {
+                throw new \Exception();
+            }
+        } catch (\Exception) {
+            return json_encode($this->makeMessage('error', 'an error has occurred'));
+        }
     }
 
     public function makeMessage($type, $content): array
