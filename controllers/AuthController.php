@@ -6,11 +6,16 @@ use CureCo\models\LoginForm;
 use CureCo\models\Product;
 use sixon\hwFramework\Application;
 use sixon\hwFramework\Controller;
+use sixon\hwFramework\middlewares\AuthMiddleware;
 use sixon\hwFramework\Request;
 use sixon\hwFramework\Response;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->registerMiddleware(new AuthMiddleware(['logout','dashboard','uploadFile','getProducts','productCreate','productUpdate','ProductDelete']));
+    }
 
     public function uploadFile(array $source, string $target)
     {
@@ -37,6 +42,14 @@ class AuthController extends Controller
     {
         if ($request->isGet()) {
             return $this->render('dashboard');
+        }
+    }
+
+    public function logout(Request $request, Response $response)
+    {
+        if ($request->isGet()) {
+            Application::$app->logout();
+            $response->redirect('/');
         }
     }
 
@@ -114,17 +127,17 @@ class AuthController extends Controller
         $response->setContentType(Response::TYPE_JSON);
         try {
 
-            $products = $request->getBody()['products'] ?? throw new \Exception();
+            $products = $request->getBody()['products'] ?? throw new \Exception('Request Malformed');
             if (is_array($products)) {
                 foreach ($products as $id) {
                     Product::delete(['id' => $id]);
                 }
                 return json_encode($this->makeMessage('info', 'Product(s) has been deleted'));
             } else {
-                throw new \Exception();
+                throw new \Exception('No product selected');
             }
-        } catch (\Exception) {
-            return json_encode($this->makeMessage('error', 'an error has occurred'));
+        } catch (\Exception $exception) {
+            return json_encode($this->makeMessage('error', $exception->getMessage()));
         }
     }
 
