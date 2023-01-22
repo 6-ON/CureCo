@@ -30,10 +30,12 @@ $app->router->get('/api/products/get', [AuthController::class, 'getProducts']);
 
 
 
+// Product options
 $app->router->post('/api/products/get', [AuthController::class, 'getProducts']);
-
 $app->router->post('/api/products/update', [AuthController::class, 'productUpdate']);
 $app->router->post('/api/products/create', [AuthController::class, 'productCreate']);
+$app->router->post('/api/products/delete', [AuthController::class, 'productDelete']);
+// Auth Options
 $app->router->post('/', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->post('/dashboard', [AuthController::class, 'dashboard']);
