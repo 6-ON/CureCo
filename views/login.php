@@ -1,5 +1,6 @@
 <?php
 /* @var $this \sixon\hwFramework\View */
+/* @var $hasErrors bool */
 
 $this->title = 'Login';
 ?>
@@ -9,9 +10,9 @@ $this->title = 'Login';
 
     <div class="auth-container">
         <img src="img/logo.svg" class="w-64 h-64" alt="">
-        <form action="" class="auth-form">
-            <input type="text" placeholder="email" class="login-field">
-            <input type="password" placeholder="*****" class="login-field">
+        <form action="" method="post" class="auth-form">
+            <input name="email" type="text" placeholder="email" class="login-field">
+            <input name="password" type="password" placeholder="*****" class="login-field <?= ($hasErrors)?'field-error':'' ?>">
             <div class="ml-2 mt-3 flex items-center gap-2">
                 <input type="checkbox" class="dt-checkbox" name="remember-me" id="remember-me">
                 <label for="remember-me" class="text-blue-50 font-mono">Remember me</label>
