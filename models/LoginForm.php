@@ -43,6 +43,7 @@ class LoginForm extends DbModel
     {
         $user = User::findOne(['email'=>$this->email]);
         if (!$user){
+            $this->addError('email','user not found');
             return false;
         }
         if (!password_verify($this->password, $user->password)) {
