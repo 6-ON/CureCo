@@ -2,6 +2,7 @@
 
 namespace CureCo\controllers;
 
+use CureCo\models\LoginForm;
 use CureCo\models\Product;
 use sixon\hwFramework\Application;
 use sixon\hwFramework\Controller;
@@ -21,11 +22,15 @@ class AuthController extends Controller
     public function login(Request $request, Response $response)
     {
         $this->setLayout('empty');
-        if ($request->isGet()) {
-            return $this->render('login');
-        } else {
-            $response->redirect('/dashboard');
+        $loginForm = new LoginForm();
+        if ($request->isPost()) {
+            $loginForm->loadData($request->getBody());
+            if ($loginForm->validate() && $loginForm->login()) {
+                $response->redirect('/dashboard');
+            }
         }
+        return $this->render('login', ['hasErrors' => !empty($loginForm->errors)]);
+
     }
 
     public function dashboard(Request $request, Response $response)
