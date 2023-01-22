@@ -2,6 +2,7 @@
 
 namespace CureCo\models;
 
+use sixon\hwFramework\Application;
 use sixon\hwFramework\UserModel;
 
 class User extends UserModel
@@ -55,5 +56,10 @@ class User extends UserModel
     public function getDisplayEmail(): string
     {
         return $this->email;
+    }
+
+    public function getDisplayImage(): string
+    {
+        return 'http://'. $_SERVER['HTTP_HOST'] . '/img/users/' . $this->image;
     }
 }
