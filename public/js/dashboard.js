@@ -15,21 +15,25 @@ const Toast = Swal.mixin({
 
 
 function loadProducts(options = {}) {
-    $('table tbody').empty()
-    $('#loading-spinner').show()
+    const rows = $('table tbody');
     $.ajax({
         url: "/api/products/get",
         data: options,
         type: 'GET',
         dataType: 'json',
+        beforeSend : function () {
+            rows.empty()
+            $('#loading-spinner').show()
+        },
         success: function (res) {
+            rows.empty()
             $('#loading-spinner').hide()
             if (!res.length) {
-                $('table tbody').append(noResults())
+                rows.append(noResults())
                 return
             }
             for (const product of res) {
-                $('table tbody').append(productRow(product))
+                rows.append(productRow(product))
             }
         },
         error: function (error) {
@@ -50,8 +54,8 @@ $(function () {
 
 
     //searching and updating datatable
-    $('#topbar-search').bind('keyup', async function () {
-        await loadProducts({term: $(this).val()})
+    $('#topbar-search').bind('keyup', function () {
+        loadProducts({term: $(this).val()})
     })
 
     // edit button click
