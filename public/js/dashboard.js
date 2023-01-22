@@ -50,8 +50,8 @@ $(function () {
 
 
     //searching and updating datatable
-    $('#topbar-search').bind('keyup',  async function () {
-           await loadProducts({term: $(this).val()})
+    $('#topbar-search').bind('keyup', async function () {
+        await loadProducts({term: $(this).val()})
     })
 
     // edit button click
@@ -173,6 +173,33 @@ $(function () {
             }
         })
     })
+    $('#btn-delete').on('click', function () {
+        const dataToSend = new FormData()
+        $('table tbody input[type="checkbox"]').map(function () {
+            if ($(this).is(':checked') && !isNaN($(this).val()))
+                dataToSend.append('products[]',$(this).val())
+        })
 
+        $.ajax({
+            url: '/api/products/delete',
+            type: 'POST',
+            dataType: 'json',
+            data: dataToSend,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success : function (res) {
+                console.log(res)
+                Toast.fire({
+                    icon: res.type,
+                    title: res.content
+                })
+                loadProducts()
+            },
+            error : function (error) {
+
+            }
+        })
+    })
 
 })
