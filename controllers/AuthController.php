@@ -60,11 +60,9 @@ class AuthController extends Controller
         if ($id) {
             return json_encode(Product::findOne(['id' => $id]));
         } else {
-            $term = $request->getBody()['term'] ?? false;
-            if ($term) {
-                return json_encode(Product::search($term));
-            }
-            return json_encode(Product::getAll());
+            $term = $request->getBody()['term'] ?? '';
+            $order = $request->getBody()['order'] ?? [];
+            return json_encode(Product::search($term,$order));
         }
 
     }
