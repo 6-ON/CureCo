@@ -106,7 +106,7 @@ $(function () {
         })
 
     })
-    // form on submit event
+    // update form on submit event
     $('#update-form').on('submit', function (event) {
         event.preventDefault()
 
@@ -149,6 +149,7 @@ $(function () {
             }
         })
     })
+    // create logic
     $('#create-form').on('submit', function (event) {
         event.preventDefault();
         const thisForm = $(this)[0]
@@ -176,20 +177,31 @@ $(function () {
                 fields
                     .prop('disabled', false)
                     .removeClass('cursor-not-allowed')
-                $('#createProductModal').click()
-                Toast.fire({
-                    icon: res.type,
-                    title: res.content
-                })
-                loadProducts()
-                thisForm.reset()
+                if (res.type === 'success'){
+                    Swal.fire({
+                        icon : res.type,
+                        title: res.content +' add More ?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            thisForm.reset()
+                        } else if (result.dismiss) {
+                            loadProducts()
+                            thisForm.reset()
+                            $('#createProductModal').click()
+
+                        }
+                    })
+                }
             },
             error: function (error) {
                 console.error(error)
             }
         })
     })
-
+    //delete logic
     $('#delete-confirm-btn').on('click', function () {
         const dataToSend = new FormData()
         $('table tbody input[type="checkbox"]:checked').map(function () {
