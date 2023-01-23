@@ -27,7 +27,7 @@ function loadProducts(options = {}) {
         },
         success: function (res) {
             rows.empty()
-            $('#btn-delete').prop('disabled',true)
+            $('#btn-delete').prop('disabled', true)
             $('#loading-spinner').hide()
             if (!res.length) {
                 rows.append(noResults())
@@ -54,7 +54,22 @@ $(function () {
         $('table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'))
     })
 
+    $('table button[data-order-by]').on('click', async function () {
+        const column = $(this).attr('data-order-by').toLowerCase()
+        const  orderType = $(this).attr('data-order-type').toLowerCase()
+        const order = {}
+        order[column] = orderType
+        await loadProducts({
+            term: $('#topbar-search').val(),
+            order
+        })
 
+        if (orderType === 'asc') {
+            $(this).attr('data-order-type', 'desc')
+        } else {
+            $(this).attr('data-order-type', 'asc')
+        }
+    })
     //searching and updating datatable
     $('#topbar-search').bind('keyup', function () {
         loadProducts({term: $(this).val()})
@@ -63,9 +78,9 @@ $(function () {
     tableBody.on('change', 'input[type="checkbox"]', function () {
         const btnDelete = $('#btn-delete')
         if ($('table tbody input[type="checkbox"]:checked').length === 0) {
-            btnDelete.prop('disabled',true)
-        }else{
-            btnDelete.prop('disabled',false)
+            btnDelete.prop('disabled', true)
+        } else {
+            btnDelete.prop('disabled', false)
         }
     })
     // edit button click
@@ -177,10 +192,10 @@ $(function () {
                 fields
                     .prop('disabled', false)
                     .removeClass('cursor-not-allowed')
-                if (res.type === 'success'){
+                if (res.type === 'success') {
                     Swal.fire({
-                        icon : res.type,
-                        title: res.content +' add More ?',
+                        icon: res.type,
+                        title: res.content + ' add More ?',
                         showCancelButton: true,
                         confirmButtonText: 'Yes',
                     }).then((result) => {
