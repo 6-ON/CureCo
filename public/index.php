@@ -28,6 +28,7 @@ $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/dashboard', [AuthController::class, 'dashboard']);
 $app->router->get('/api/products/get', [AuthController::class, 'getProducts']);
+$app->router->get('/api/products/stats', [AuthController::class, 'getStats']);
 
 
 
