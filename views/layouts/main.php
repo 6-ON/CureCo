@@ -14,7 +14,7 @@ use sixon\hwFramework\Application;
     <title><?= $this->title ?></title>
     <link rel="stylesheet" href="css/output.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
