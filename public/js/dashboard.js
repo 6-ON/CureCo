@@ -13,6 +13,27 @@ const Toast = Swal.mixin({
     }
 })
 
+function refreshStats() {
+    $.ajax({
+        url: '/api/products/stats',
+        type: 'GET',
+        contentType: 'json',
+        success: function (res) {
+            for (const key in res) {
+                const card = $(`div[data-stats=${key}]`);
+                card.addClass('animate__animated animate__tada')
+                setTimeout(() => {
+                    card.removeClass('animate__animated animate__tada')
+                },1500)
+
+                $(`div[data-stats=${key}] p[data-stats-val]`).text(res[key])
+            }
+        },
+        error: function (error) {
+            console.error(error)
+        }
+    })
+}
 
 function loadProducts(options = {}) {
     const rows = $('table tbody');
@@ -47,6 +68,8 @@ function loadProducts(options = {}) {
 
 $(function () {
     const tableBody = $('table tbody')
+    //refresh stats
+    refreshStats()
     //loading products
     loadProducts()
     // toggle all table rows
@@ -56,7 +79,7 @@ $(function () {
 
     $('table button[data-order-by]').on('click', async function () {
         const column = $(this).attr('data-order-by').toLowerCase()
-        const  orderType = $(this).attr('data-order-type').toLowerCase()
+        const orderType = $(this).attr('data-order-type').toLowerCase()
         const order = {}
         order[column] = orderType
         await loadProducts({
@@ -157,6 +180,7 @@ $(function () {
                 })
                 $('#updateProductModal').click()
                 loadProducts()
+                refreshStats()
 
             },
             error: function (e) {
@@ -204,6 +228,7 @@ $(function () {
                             thisForm.reset()
                         } else if (result.dismiss) {
                             loadProducts()
+                            refreshStats()
                             thisForm.reset()
                             $('#createProductModal').click()
 
@@ -248,6 +273,7 @@ $(function () {
                 })
                 $('#deleteModal').click()
                 loadProducts()
+                refreshStats()
             },
             error: function (error) {
                 console.error(error)
