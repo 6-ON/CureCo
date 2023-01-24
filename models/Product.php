@@ -57,7 +57,7 @@ class Product extends DbModel
 
     public static function stats()
     {
-        $sql="SELECT COUNT(*) AS count, MIN(price) as min,MAX(price) as max,AVG(price) as avg  FROM products";
+        $sql="SELECT COUNT(*) AS count, MIN(price) as min,MAX(price) as max,ROUND(AVG(price),2) as avg  FROM products";
         $stmt = Application::$app->db->pdo->query($sql);
         return $stmt->fetch(PDO::FETCH_ASSOC);
 
