@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->registerMiddleware(new AuthMiddleware(['logout','dashboard','uploadFile','getProducts','productCreate','productUpdate','ProductDelete']));
+        $this->registerMiddleware(new AuthMiddleware(['logout', 'dashboard', 'uploadFile', 'getProducts', 'productCreate', 'productUpdate', 'ProductDelete']));
     }
 
     public function uploadFile(array $source, string $target)
@@ -22,6 +22,16 @@ class AuthController extends Controller
         if ($source['error'] == 0) {
             move_uploaded_file($source['tmp_name'], Application::$ROOT_DIR . '/public/img/products/' . $target);
         }
+    }
+
+    public function index(Request $request,Response $response)
+    {
+        if (Application::isGuest())
+            $page = '/login';
+        else
+            $page = '/dashboard';
+
+        $response->redirect($page);
     }
 
     public function login(Request $request, Response $response)
@@ -62,7 +72,7 @@ class AuthController extends Controller
         } else {
             $term = $request->getBody()['term'] ?? '';
             $order = $request->getBody()['order'] ?? [];
-            return json_encode(Product::search($term,$order));
+            return json_encode(Product::search($term, $order));
         }
 
     }
