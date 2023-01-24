@@ -77,6 +77,11 @@ class AuthController extends Controller
 
     }
 
+    public function getStats(Request $request, Response $response)
+    {
+        $response->setContentType(Response::TYPE_JSON);
+        return json_encode(Product::stats());
+    }
     public function productCreate(Request $request, Response $response): false|string
     {
         $response->setContentType(Response::TYPE_JSON);
