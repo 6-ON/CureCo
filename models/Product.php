@@ -2,6 +2,7 @@
 
 namespace CureCo\models;
 
+use PDO;
 use sixon\hwFramework\Application;
 use sixon\hwFramework\db\DbModel;
 
@@ -49,8 +50,16 @@ class Product extends DbModel
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->bindValue(':term', $term);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, self::class);
 
+
+    }
+
+    public static function stats()
+    {
+        $sql="SELECT COUNT(*) AS count, MIN(price) as min,MAX(price) as max,AVG(price) as avg  FROM products";
+        $stmt = Application::$app->db->pdo->query($sql);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
 
