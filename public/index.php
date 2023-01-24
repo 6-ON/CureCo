@@ -23,7 +23,7 @@ $config = [
 ];
 $app = new Application(dirname(__DIR__), $config);
 
-$app->router->get('/', [AuthController::class, 'login']);
+$app->router->get('/', [AuthController::class, 'index']);
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->get('/logout', [AuthController::class, 'logout']);
 $app->router->get('/dashboard', [AuthController::class, 'dashboard']);
@@ -37,7 +37,6 @@ $app->router->post('/api/products/update', [AuthController::class, 'productUpdat
 $app->router->post('/api/products/create', [AuthController::class, 'productCreate']);
 $app->router->post('/api/products/delete', [AuthController::class, 'productDelete']);
 // Auth Options
-$app->router->post('/', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->post('/dashboard', [AuthController::class, 'dashboard']);
 
